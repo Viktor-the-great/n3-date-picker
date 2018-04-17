@@ -1,0 +1,31 @@
+{
+  "name": "n3-date-picker",
+  "version": "0.0.1",
+  "description": "DatePicker component for react application",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint:js": "eslint src/js --ext .js,.jsx",
+    "lint:css": "stylelint src/css/**/*.css",
+    "lint": "yarn run lint:js && yarn run lint:css"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "datepicker"
+  ],
+  "author": "Viktor Voloshin <v.voloshin@netrika.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "@n3/eslint-config": "^0.2.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.3",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  }
+}
