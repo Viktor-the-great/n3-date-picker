@@ -1,3 +1,17 @@
 .n3__date-picker {
 
+  .n3__date-picker-day {
+
+    &_empty {
+
+    }
+
+    &_selected {
+
+    }
+
+    &_bordered {
+
+    }
+  }
 }

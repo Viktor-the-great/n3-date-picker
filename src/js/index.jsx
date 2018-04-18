@@ -32,8 +32,10 @@ export default class DatePicker extends Component {
   };
 
   onClear = () => {
-    this.props.onChange(null)
-  }
+    this.props.onChange(
+      this.props.range ? { from: null, to: null } : null
+    );
+  };
 
   render() {
     const {
@@ -44,7 +46,7 @@ export default class DatePicker extends Component {
 
     const Calendar = this.props.calendar;
     const isClearable = clear && this.props.value !== null;
-    const value = value ? moment(value, accepted_format, true).format(format) : '';
+    const value = this.props.value ? moment(this.props.value, accepted_format, true).format(format) : '';
 
     return (
       <div tabIndex="1"
@@ -78,7 +80,14 @@ export default class DatePicker extends Component {
 }
 
 DatePicker.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.shape({
+      from: PropTypes.string,
+      to: PropTypes.string,
+    }),
+    PropTypes.string,
+  ]).isRequired,
+
   accepted_format: PropTypes.arrayOf(
     PropTypes.string,
   ),
