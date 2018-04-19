@@ -2,8 +2,11 @@
   "name": "n3-date-picker",
   "version": "0.0.1",
   "description": "DatePicker component for react application",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "yarn run build:js && yarn run build:css",
+    "build:js": "babel src/js --out-dir dist --ignore __tests__",
+    "build:css": "postcss src/css/n3-date-picker.css --dir dist",
     "lint:js": "eslint src/js --ext .js,.jsx",
     "lint:css": "stylelint src/css/**/*.css",
     "lint": "yarn run lint:js && yarn run lint:css"
@@ -15,6 +18,13 @@
   ],
   "author": "Viktor Voloshin <v.voloshin@netrika.ru>",
   "license": "MIT",
+  "peerDependencies": {
+    "classnames": "^2.0.0",
+    "moment": "^2.0.0",
+    "prop-types": "^15.0.0",
+    "react": "^16.0.0",
+    "react-moment-proptypes": "^1.5.0"
+  },
   "devDependencies": {
     "@n3/eslint-config": "^0.2.0",
     "babel-cli": "^6.26.0",
@@ -24,8 +34,14 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "classnames": "^2.2.5",
+    "moment": "^2.22.1",
+    "postcss-cli": "^5.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-moment-proptypes": "^1.5.0"
+  },
+  "dependencies": {
+    "stylelint": "^9.2.0"
   }
 }

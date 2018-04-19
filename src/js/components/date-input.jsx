@@ -13,26 +13,39 @@ export default class DateInput extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  async onChange(event) {
-    const value = event.target.value;
-
+  async onChange({ target: { value } }) {
     await this.setState({
       value,
     });
 
-    if(moment(value, this.props.format, true).isValid()) {
+    if (moment(value, this.props.formats, true).isValid()) {
       this.props.onChange(value);
     }
   }
 
   render() {
     return (
-      <input type="text"
-             className={ this.props.className }
-             value={ this.state.value }
-             onChange={ this.onChange }
+      <input
+        type="text"
+        className={this.props.className}
+        value={this.state.value}
+        onChange={this.onChange}
       />
-    )
+    );
   }
 }
+
+DateInput.propTypes = {
+  value: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  formats: PropTypes.arrayOf(
+    PropTypes.string,
+  ),
+};
+
+DateInput.defaultProps = {
+  className: '',
+  formats: null,
+};
 

@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import moment from 'moment';
+import momentPropTypes from 'react-moment-proptypes';
+
 import cx from 'classnames';
 
 import Input from './date-input';
+import Month from './month';
 
 export default class Calendar extends Component {
   constructor(props) {
@@ -11,12 +15,14 @@ export default class Calendar extends Component {
 
     this.state = {
       current: moment(),
-      selected: this.getSelected(props),
+      selected: this.selected,
     };
 
     this.onSingleChange = this.onSingleChange.bind(this);
     this.onFromChange = this.onFromChange.bind(this);
     this.onToChange = this.onToChange.bind(this);
+    this.isSelected = this.isSelected.bind(this);
+    this.isBordered = this.isBordered.bind(this);
   }
 
   onSingleChange(value) {
@@ -24,101 +30,170 @@ export default class Calendar extends Component {
   }
 
   onFromChange(value) {
-    this.props.onChange({ ...this.props.value, from: value })
+    this.props.onChange({ from: value, to: this.props.to });
   }
 
   onToChange(value) {
-    this.props.onChange({ ...this.props.value, to: value });
+    this.props.onChange({ from: this.props.from, to: value });
   }
 
-  getSelected(props) {
-    if (!props.range) {
-      return props.value ? moment(props.value, props.formats, true) : moment();
+  get selected() {
+    if (!this.props.range) {
+      return this.props.value ? moment(this.props.value, this.props.formats, true) : moment();
     }
 
-    if (props.from) {
-      return moment(props.from, props.formats, true);
+    if (this.props.from) {
+      return moment(this.props.from, this.props.formats, true);
     }
 
-    if (props.to) {
-      return moment(props.to, props.formats, true);
+    if (this.props.to) {
+      return moment(this.props.to, this.props.formats, true);
     }
 
     return moment();
   }
 
+  get months() {
+    const start = moment(this.state.selected).subtract(2, 'month');
+    const end = moment(this.state.selected).add(2, 'month');
+
+    const months = [];
+    while (end.isSameOrAfter(start)) {
+      months.push(moment(start));
+      start.add(1, 'month');
+    }
+
+    return months;
+  }
+
+  get years() {
+    const start = this.state.selected.year() - 6;
+
+    return Array.from({ length: 14 }, (item, i) => start + i);
+  }
+
+  isSelected(day) {
+    if (this.props.range) {
+      if (!this.props.from && !this.props.to) { return false; }
+
+      if (!this.props.from) { return moment(this.props.to, this.props.formats, true).isSame(day, 'day'); }
+
+      if (!this.props.to) { return moment(this.props.from, this.props.formats, true).isSame(day, 'day'); }
+
+      return moment(this.props.to, this.props.formats, true).isSameOrBefore(day, 'day') &&
+        moment(this.props.from, this.props.formats, true).isSameOrAfter(day, 'day');
+    }
+
+    return this.props.value ? moment(this.props.value, this.props.formats, true).isSame(day, 'day') : false;
+  }
+
+  isBordered(day) {
+    if (this.props.range) {
+      if (this.props.from) { return moment(this.props.from, this.props.formats, true).isSame(day, 'day'); }
+
+      if (this.props.to) { return moment(this.props.from, this.props.formats, true).isSame(day, 'day'); }
+
+      return false;
+    }
+
+    return this.props.value ? moment(this.props.value, this.props.formats, true).isSame(day, 'day') : false;
+  }
+
   render() {
     const {
+      value,
+      from,
+      to,
+
       range,
+      onChange,
     } = this.props;
 
     const weekdays = moment.weekdaysMin(true);
-    const months = moment.monthsShort();
+    const monthLabels = moment.monthsShort();
 
     return (
-      <div className='n3__date-picker-menu'>
-        <div className='n3__date-picker-inputs'>
+      <div className="n3__date-picker-menu">
+        <div className="n3__date-picker-inputs">
           {
             range ? (
-              <Input value={ this.state.value }
-                     onChange={ this.onSingleChange }
-                     className='n3__date-picker-input'
+              <Input
+                value={value}
+                onChange={this.onSingleChange}
+                className="n3__date-picker-input"
               />
             ) : (
               <div>
-                <Input value={ this.state.value.from }
-                       onChange={ this.onFromChange }
-                       className='n3__date-picker-input'
+                <Input
+                  value={from}
+                  onChange={this.onFromChange}
+                  className="n3__date-picker-input"
                 />
 
-                <div className='n3__date-picker-dash'>
+                <div className="n3__date-picker-dash">
                   &mdash;
                 </div>
 
-                <Input value={ this.state.value.to }
-                       onChange={ this.onToChange }
-                       className='n3__date-picker-input'
+                <Input
+                  value={to}
+                  onChange={this.onToChange}
+                  className="n3__date-picker-input"
                 />
               </div>
             )
           }
         </div>
 
-        <div className='n3__date-picker-calendar'>
-          <div className='n3__date-picker-weekdays'>
+        <div className="n3__date-picker-calendar">
+          <div className="n3__date-picker-weekdays">
             {
               weekdays.map((weekday, i) => (
-                <span key={ i } className='n3__date-picker-weekday'>
+                <span key={i} className="n3__date-picker-weekday">
                   { weekday }
                 </span>
               ))
             }
           </div>
           <div>
-            <div className='n3__date-picker-days'></div>
-            <div className='n3__date-picker-months'>
+            <div className="n3__date-picker-months">
               {
-                months.map((month, i) => (
-                  <div key={ i } className={ cx('n3__date-picker-month', {
-                    'n3__date-picker-month_current': this.state.current.isSame(month, 'month'),
-                    'n3__date-picker-month_selected': this.state.selected.isSame(month, 'month'),
-                  }) }>
+                this.months.map((month, i) => (
+                  <div key={i} className="n3__date-picker-month">
+                    <Month
+                      month={month}
+                      isSelected={this.isSelected}
+                      isBordered={this.isBordered}
+                      onClick={onChange}
+                    />
+                  </div>
+                ))
+              }
+            </div>
+            <div className="n3__date-picker-month-labels">
+              {
+                monthLabels.map((month, i) => (
+                  <div
+                    key={i}
+                    className={cx('n3__date-picker-month-label', {
+                    'n3__date-picker-month-label_current': this.state.current.isSame(month, 'month'),
+                    'n3__date-picker-month-label_selected': this.state.selected.isSame(month, 'month'),
+                  })}
+                  >
                     { month }
                   </div>
                 ))
               }
             </div>
-            <div className='n3__date-picker-years'>
+            <div className="n3__date-picker-years">
               {
-                [
-                  ...Array.from({ length: 6 }, (item, i, list) => selected.year() - (list.length - i)),
-                  selected.year(),
-                  ...Array.from({ length: 7 }, (item, i, list) => selected.year() + i + 1),
-                ].map((year, i) => (
-                  <div key={ i } className={ cx('n3__date-picker-year', {
+                this.years.map((year, i) => (
+                  <div
+                    key={i}
+                    className={cx('n3__date-picker-year', {
                     'n3__date-picker-year_current': this.state.current.isSame(year, 'year'),
                     'n3__date-picker-year_selected': this.state.selected.isSame(year, 'year'),
-                  }) }>
+                  })}
+                  >
                     year
                   </div>
                 ))
@@ -127,6 +202,28 @@ export default class Calendar extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+Calendar.propTypes = {
+  value: momentPropTypes.momentString,
+
+  from: momentPropTypes.momentString,
+  to: momentPropTypes.momentString,
+
+  range: PropTypes.bool,
+  formats: PropTypes.arrayOf(
+    PropTypes.string,
+  ),
+  onChange: PropTypes.func.isRequired,
+};
+
+Calendar.defaultProps = {
+  value: null,
+  from: null,
+  to: null,
+
+  range: false,
+  formats: null,
+};
