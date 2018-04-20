@@ -1,10 +1,9 @@
 {
   "scripts": {
-    "copy": "cp -r ../../lib/* node_modules/@n3/date-picker/lib/ && cp -r ../../dist/* node_modules/@n3/date-picker/dist/",
     "start": "webpack-dev-server --host 0.0.0.0"
   },
   "dependencies": {
-    "@n3/date-picker": "file:..",
+    "@n3/date-picker": "file:../",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.1",
