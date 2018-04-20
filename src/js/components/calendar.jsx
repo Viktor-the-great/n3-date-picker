@@ -74,11 +74,17 @@ export default class Calendar extends Component {
 
   isSelected(day) {
     if (this.props.range) {
-      if (!this.props.from && !this.props.to) { return false; }
+      if (!this.props.from && !this.props.to) {
+        return false;
+      }
 
-      if (!this.props.from) { return moment(this.props.to, this.props.formats, true).isSame(day, 'day'); }
+      if (!this.props.from) {
+        return moment(this.props.to, this.props.formats, true).isSame(day, 'day');
+      }
 
-      if (!this.props.to) { return moment(this.props.from, this.props.formats, true).isSame(day, 'day'); }
+      if (!this.props.to) {
+        return moment(this.props.from, this.props.formats, true).isSame(day, 'day');
+      }
 
       return moment(this.props.to, this.props.formats, true).isSameOrBefore(day, 'day') &&
         moment(this.props.from, this.props.formats, true).isSameOrAfter(day, 'day');
@@ -89,9 +95,13 @@ export default class Calendar extends Component {
 
   isBordered(day) {
     if (this.props.range) {
-      if (this.props.from) { return moment(this.props.from, this.props.formats, true).isSame(day, 'day'); }
+      if (this.props.from) {
+        return moment(this.props.from, this.props.formats, true).isSame(day, 'day');
+      }
 
-      if (this.props.to) { return moment(this.props.from, this.props.formats, true).isSame(day, 'day'); }
+      if (this.props.to) {
+        return moment(this.props.from, this.props.formats, true).isSame(day, 'day');
+      }
 
       return false;
     }
@@ -113,58 +123,60 @@ export default class Calendar extends Component {
     const monthLabels = moment.monthsShort();
 
     return (
-      <div className="n3__date-picker-menu">
-        <div className="n3__date-picker-inputs">
+      <div className="n3__date-picker__menu">
+        <div className="n3__date-picker__menu-inputs">
           {
             range ? (
-              <Input
-                value={value}
-                onChange={this.onSingleChange}
-                className="n3__date-picker-input"
-              />
-            ) : (
               <div>
                 <Input
-                  value={from}
-                  onChange={this.onFromChange}
-                  className="n3__date-picker-input"
+                  value={ from }
+                  onChange={ this.onFromChange }
+                  className="n3__date-picker__menu-input"
                 />
 
-                <div className="n3__date-picker-dash">
+                <div className="n3__date-picker__menu-dash">
                   &mdash;
                 </div>
 
                 <Input
-                  value={to}
-                  onChange={this.onToChange}
-                  className="n3__date-picker-input"
+                  value={ to }
+                  onChange={ this.onToChange }
+                  className="n3__date-picker__menu-input"
                 />
               </div>
+            ) : (
+              <Input
+                value={ value }
+                onChange={ this.onSingleChange }
+                className="n3__date-picker__menu-input"
+              />
             )
           }
         </div>
 
-        <div className="n3__date-picker-calendar">
-          <div className="n3__date-picker-weekdays">
-            {
-              weekdays.map((weekday, i) => (
-                <span key={i} className="n3__date-picker-weekday">
+        <div className="n3__date-picker__menu-weekdays">
+          {
+            weekdays.map((weekday, i) => (
+              <span key={ i } className="n3__date-picker__menu-weekday">
                   { weekday }
                 </span>
-              ))
-            }
-          </div>
+            ))
+          }
+        </div>
+
+
+        <div className="n3__date-picker__menu-calendar">
           <div>
             <div className="n3__date-picker-months">
               {
                 this.months.map((month, i) => (
-                  <div key={i} className="n3__date-picker-month">
-                    <Month
-                      month={month}
-                      isSelected={this.isSelected}
-                      isBordered={this.isBordered}
-                      onClick={onChange}
-                    />
+                  <div key={ i } className="n3__date-picker-month">
+                    { /*<Month*/ }
+                    { /*month={month}*/ }
+                    { /*isSelected={this.isSelected}*/ }
+                    { /*isBordered={this.isBordered}*/ }
+                    { /*onClick={onChange}*/ }
+                    { /*/>*/ }
                   </div>
                 ))
               }
@@ -173,11 +185,11 @@ export default class Calendar extends Component {
               {
                 monthLabels.map((month, i) => (
                   <div
-                    key={i}
-                    className={cx('n3__date-picker-month-label', {
-                    'n3__date-picker-month-label_current': this.state.current.isSame(month, 'month'),
-                    'n3__date-picker-month-label_selected': this.state.selected.isSame(month, 'month'),
-                  })}
+                    key={ i }
+                    className={ cx('n3__date-picker-month-label', {
+                      'n3__date-picker-month-label_current': this.state.current.isSame(month, 'month'),
+                      'n3__date-picker-month-label_selected': this.state.selected.isSame(month, 'month'),
+                    }) }
                   >
                     { month }
                   </div>
@@ -188,11 +200,11 @@ export default class Calendar extends Component {
               {
                 this.years.map((year, i) => (
                   <div
-                    key={i}
-                    className={cx('n3__date-picker-year', {
-                    'n3__date-picker-year_current': this.state.current.isSame(year, 'year'),
-                    'n3__date-picker-year_selected': this.state.selected.isSame(year, 'year'),
-                  })}
+                    key={ i }
+                    className={ cx('n3__date-picker-year', {
+                      'n3__date-picker-year_current': this.state.current.isSame(year, 'year'),
+                      'n3__date-picker-year_selected': this.state.selected.isSame(year, 'year'),
+                    }) }
                   >
                     year
                   </div>

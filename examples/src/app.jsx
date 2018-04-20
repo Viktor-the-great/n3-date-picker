@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import DatePicker from '@n3/date-picker';
+import DatePicker from '../../src/js';
 
 export default class App extends Component {
   constructor(props) {
@@ -42,16 +42,16 @@ export default class App extends Component {
           </div>
         </div>
 
-        <div>
-          <h2>Range date-picker</h2>
-          <div>
-            <DatePicker
-              value={ this.state.range }
-              range
-              onChange={ this.onRangeChange }
-            />
-          </div>
-        </div>
+        {/*<div>*/}
+          {/*<h2>Range date-picker</h2>*/}
+          {/*<div>*/}
+            {/*<DatePicker*/}
+              {/*value={ this.state.range }*/}
+              {/*range*/}
+              {/*onChange={ this.onRangeChange }*/}
+            {/*/>*/}
+          {/*</div>*/}
+        {/*</div>*/}
       </div>
     )
   }

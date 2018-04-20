@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import moment from 'moment';
@@ -49,12 +49,15 @@ export default class DatePicker extends Component {
 
   render() {
     const {
+      range,
       formats,
       format,
     } = this.props;
 
     const Calendar = this.props.calendar;
     const value = this.props.value ? moment(this.props.value, formats, true).format(format) : '';
+    const from = this.props.from ? moment(this.props.from, formats, true).format(format) : '';
+    const to = this.props.to ? moment(this.props.to, formats, true).format(format) : '';
 
     return (
       <div
@@ -66,29 +69,55 @@ export default class DatePicker extends Component {
         <div
           role="button"
           tabIndex={-1}
+          className='n3__date-picker__field'
           onClick={this.onToggle}
           onKeyDown={this.onToggle}
         >
-          <div>{ value }</div>
+
+          <div className="n3__date-picker__field-labels">
+            {
+              range ? (
+                <Fragment>
+                  <div className="n3__date-picker__field-label">{ from }</div>
+
+                  {
+                    to && (
+                      <Fragment>
+                        <div className="n3__date-picker__field-dash">
+                          &mdash;
+                        </div>
+
+                        <div className="n3__date-picker__field-label">{ to }</div>
+                      </Fragment>
+                    )
+                  }
+                </Fragment>
+              ) : (
+                <span>{ value }</span>
+              )
+            }
+          </div>
+
+
           {
             this.isClearable && (
               <button
                 type="button"
-                className="n3__date-picker-clear"
+                className="n3__date-picker__field-clear"
                 onClick={this.onClear}
               >
-                <i className="fa fa-times" />
+                <i className="fa fa-close" />
               </button>
             )
           }
 
-          <div>
+          <div className='n3__date-picker__field-calendar'>
             <i className="fa fa-calendar-o" />
           </div>
         </div>
         {
           this.state.opened && (
-            <Calendar {...this.props} />
+            <Calendar { ...this.props }/>
           )
         }
       </div>

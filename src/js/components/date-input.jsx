@@ -6,9 +6,12 @@ export default class DateInput extends Component {
   constructor(props) {
     super(props);
 
+    const value = props.value || '';
+
     this.state = {
-      value: props.value,
+      value,
     };
+
 
     this.onChange = this.onChange.bind(this);
   }

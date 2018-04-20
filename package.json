@@ -5,8 +5,9 @@
   "main": "dist/n3-date-picker.js",
   "scripts": {
     "build": "yarn run build:js && yarn run build:css",
-    "build:js": "mkdir dist && babel src/js --out-file dist/n3-date-picker.js",
+    "build:js": "mkdir -p dist && babel src/js --out-file dist/n3-date-picker.js --source-maps",
     "build:css": "postcss src/css/n3-date-picker.css --dir dist",
+    "build:watch": "",
     "lint:js": "eslint src/js --ext .js,.jsx",
     "lint:css": "stylelint src/css/**/*.css",
     "lint": "yarn run lint:js && yarn run lint:css"
@@ -20,6 +21,7 @@
   "license": "MIT",
   "peerDependencies": {
     "classnames": "^2.0.0",
+    "font-awesome": "^4.7.0",
     "moment": "^2.0.0",
     "prop-types": "^15.0.0",
     "react": "^16.0.0",
@@ -35,8 +37,10 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "classnames": "^2.2.5",
+    "font-awesome": "^4.7.0",
     "moment": "^2.22.1",
     "postcss-cli": "^5.0.0",
+    "postcss-url": "^7.3.2",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-moment-proptypes": "^1.5.0",
