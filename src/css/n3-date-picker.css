@@ -71,10 +71,14 @@
   padding: 2px 10px;
 }
 
-.n3__date-picker__menu-weekday {
+.n3__date-picker__menu-day {
   display: inline-block;
   width: 26px;
   height: 26px;
   line-height: 26px;
   text-align: center;
+}
+
+.n3__date-picker__menu-day_weekend {
+  color: #D64C4C;
 }

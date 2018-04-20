@@ -19,6 +19,9 @@
   ],
   "author": "Viktor Voloshin <v.voloshin@netrika.ru>",
   "license": "MIT",
+  "dependencies": {
+    "moment-business": "^3.0.1"
+  },
   "peerDependencies": {
     "classnames": "^2.0.0",
     "font-awesome": "^4.7.0",

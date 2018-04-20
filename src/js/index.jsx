@@ -69,7 +69,7 @@ export default class DatePicker extends Component {
         <div
           role="button"
           tabIndex={-1}
-          className='n3__date-picker__field'
+          className="n3__date-picker__field"
           onClick={this.onToggle}
           onKeyDown={this.onToggle}
         >
@@ -111,13 +111,13 @@ export default class DatePicker extends Component {
             )
           }
 
-          <div className='n3__date-picker__field-calendar'>
+          <div className="n3__date-picker__field-calendar">
             <i className="fa fa-calendar-o" />
           </div>
         </div>
         {
           this.state.opened && (
-            <Calendar { ...this.props }/>
+            <Calendar {...this.props} />
           )
         }
       </div>
