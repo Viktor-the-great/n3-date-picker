@@ -32,10 +32,13 @@ export default class Month extends PureComponent {
 
   render() {
     return (
-      <div className="n3__date-picker-days-container">
+      <div className="n3__date-picker__month">
+        <div className="n3__date-picker__month-title">
+          { this.props.month.format('MMMM') }
+        </div>
         {
           this.days.map((week, i) => (
-            <div key={i} className="n3__date-picker-days">
+            <div key={i} className="n3__date-picker__month-days">
               {
                 week.map((day, j) => (
                   <Day

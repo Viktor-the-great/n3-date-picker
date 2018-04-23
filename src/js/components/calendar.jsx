@@ -196,14 +196,13 @@ export default class Calendar extends Component {
           <div className="n3__date-picker__calendar-months">
             {
               this.months.map((month, i) => (
-                <div key={ i } className="n3__date-picker__calendar-month">
-                  <Month
-                    month={ month }
-                    isSelected={ this.isSelected }
-                    isBordered={ this.isBordered }
-                    onClick={ onChange }
-                  />
-                </div>
+                <Month
+                  key={ i }
+                  month={ month }
+                  isSelected={ this.isSelected }
+                  isBordered={ this.isBordered }
+                  onClick={ onChange }
+                />
               ))
             }
           </div>

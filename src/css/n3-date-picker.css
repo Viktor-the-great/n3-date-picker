@@ -71,12 +71,30 @@
   padding: 2px 10px;
 }
 
+.n3__date-picker__month {
+  & + .n3__date-picker__month {
+    margin-top: 10px;
+  }
+}
+
+.n3__date-picker__month-title {
+  font-weight: bold;
+}
+
+.n3__date-picker__month-days {
+  white-space: nowrap;
+}
+
 .n3__date-picker__calendar-day {
   display: inline-block;
   width: 26px;
   height: 26px;
   line-height: 26px;
   text-align: center;
+
+  border: 0;
+  background: transparent;
+  vertical-align: middle;
 }
 
 .n3__date-picker__calendar-day_weekend {
@@ -91,6 +109,7 @@
 
 .n3__date-picker__calendar-months {
   flex: 1;
+  padding: 15px;
 }
 
 .n3__date-picker__calendar-month-labels {
