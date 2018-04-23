@@ -17,6 +17,7 @@ export default class Calendar extends Component {
     this.state = {
       current: moment(),
       selected: this.selected,
+      position: moment(this.selected).startOf('month'),
     };
 
     this.onSingleChange = this.onSingleChange.bind(this);
@@ -25,6 +26,18 @@ export default class Calendar extends Component {
     this.isSelected = this.isSelected.bind(this);
     this.isBordered = this.isBordered.bind(this);
     this.onYearsScroll = this.onYearsScroll.bind(this);
+  }
+
+  setMonthsRef = el => this._months = el;
+  setMonth1Ref = el => this._firstMonth = el;
+  setMonth2Ref = el => this._prevMonth = el;
+  setMonth3Ref = el => this._currentMonth = el;
+  setMonth4Ref = el => this._nextMonth = el;
+  setMonth5Ref = el => this._lastMonth = el;
+
+  componentDidMount() {
+    this._marginTop = this._currentMonth.offsetTop;
+    this._months.style.marginTop = `-${ this._marginTop }px`;
   }
 
   onSingleChange(value) {
@@ -119,13 +132,33 @@ export default class Calendar extends Component {
     return this.state.selected.month() === month;
   }
 
-  onMonthsScroll = ({ currentTarget, deltaY }) => {
+  onDaysScroll = async ({ currentTarget, deltaY }) => {
+    this._marginTop = deltaY > 0 ? this._marginTop - 10 : this._marginTop + 10;
+    currentTarget.style.marginTop = `${ this._marginTop }px`;
+
+    const totalDays = this.months.reduce((res, month) => res + month.daysInMonth(), 0);
+    const days = totalDays / (currentTarget.clientHeight / 10);
+    const selected = moment(this.state.selected);
+
+    await this.setState(state => ({
+      selected: deltaY > 0 ? state.selected.add(days, 'day') : state.selected.subtract(days, 'day')
+    }));
+
+    if(!selected.isSame(this.state.selected, 'month')) {
+      this._marginTop = this._marginTop + selected.isAfter(this.state.selected, 'month') ?  - this._firstMonth.clientHeight : this._lastMonth.clientHeight
+      currentTarget.style.marginTop = `${ this._marginTop }px`;
+    }
+
+    console.log(this.state.selected.format('DD.MM.YYYY'))
+  };
+
+  onMonthsScroll = ({ deltaY }) => {
     this.setState(state => ({
       selected: deltaY > 0 ? state.selected.subtract(1, 'month') : state.selected.add(1, 'month')
     }))
   };
 
-  onYearsScroll = ({ currentTarget, deltaY }) => {
+  onYearsScroll = ({ deltaY }) => {
     this.setState(state => ({
       selected: deltaY > 0 ? state.selected.subtract(1, 'year') : state.selected.add(1, 'year')
     }))
@@ -193,16 +226,20 @@ export default class Calendar extends Component {
 
 
         <div className="n3__date-picker__calendar-block">
-          <div className="n3__date-picker__calendar-months">
+          <div className="n3__date-picker__calendar-months"
+               onWheel={ this.onDaysScroll }
+               ref={ this.setMonthsRef }
+          >
             {
               this.months.map((month, i) => (
-                <Month
-                  key={ i }
-                  month={ month }
-                  isSelected={ this.isSelected }
-                  isBordered={ this.isBordered }
-                  onClick={ onChange }
-                />
+                <div key={ i } ref={ this[`setMonth${ i + 1 }Ref`] }>
+                  <Month
+                    month={ month }
+                    isSelected={ this.isSelected }
+                    isBordered={ this.isBordered }
+                    onClick={ onChange }
+                  />
+                </div>
               ))
             }
           </div>
@@ -227,9 +264,9 @@ export default class Calendar extends Component {
                onWheel={ this.onYearsScroll }
           >
             {
-              this.years.map(year => (
+              this.years.map((year, i) => (
                 <div
-                  key={ year }
+                  key={ i }
                   className={ cx('n3__date-picker__calendar-year', {
                     'n3__date-picker__calendar-year_current': this.state.current.year() === year,
                     'n3__date-picker__calendar-year_selected': this.state.selected.year() === year,

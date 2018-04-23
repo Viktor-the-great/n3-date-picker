@@ -108,6 +108,7 @@
 }
 
 .n3__date-picker__calendar-months {
+  position: relative;
   flex: 1;
   padding: 15px;
 }
