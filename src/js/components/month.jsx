@@ -8,8 +8,8 @@ import Day from './day';
 
 export default class Month extends PureComponent {
   get days() {
-    const start = this.props.month.startOf('month');
-    const end = this.props.month.endOf('month');
+    const start = moment(this.props.month).startOf('month');
+    const end = moment(this.props.month).endOf('month');
 
     const days = [];
     while (end.isSameOrAfter(start)) {

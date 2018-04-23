@@ -28,21 +28,20 @@ export default class Day extends PureComponent {
       isBordered,
     } = this.props;
 
+    if (day === null)
+      return null;
+
     return (
       <button
-        className={cx('n3__date-picker-day', {
+        className={ cx('n3__date-picker-day', {
           'n3__date-picker-day_empty': !day,
           'n3__date-picker-day_current': moment().isSame(day, 'day'),
           'n3__date-picker-day_selected': isSelected,
           'n3__date-picker-day_bordered': isBordered,
-        })}
-        onClick={this.onClick}
+        }) }
+        onClick={ this.onClick }
       >
-        {
-          day && (
-            <span className="n3__date-picker-day-label">{ day.date() }</span>
-          )
-        }
+        <span className="n3__date-picker-day-label">{ day.date() }</span>
       </button>
     );
   }
