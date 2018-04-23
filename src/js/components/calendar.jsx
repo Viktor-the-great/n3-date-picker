@@ -111,6 +111,20 @@ export default class Calendar extends Component {
     return this.props.value ? moment(this.props.value, this.props.formats, true).isSame(day, 'day') : false;
   }
 
+  isCurrentMonth(month) {
+    return this.state.current.isSame(this.state.selected, 'year') && this.state.current.month() === month;
+  }
+
+  isSelectedMonth(month) {
+    return this.state.selected.month() === month;
+  }
+
+  onMonthsScroll = ({ currentTarget, deltaY }) => {
+    this.setState(state => ({
+      selected: deltaY > 0 ? state.selected.subtract(1, 'month') : state.selected.add(1, 'month')
+    }))
+  };
+
   onYearsScroll = ({ currentTarget, deltaY }) => {
     this.setState(state => ({
       selected: deltaY > 0 ? state.selected.subtract(1, 'year') : state.selected.add(1, 'year')
@@ -193,14 +207,16 @@ export default class Calendar extends Component {
               ))
             }
           </div>
-          <div className="n3__date-picker__calendar-month-labels">
+          <div className="n3__date-picker__calendar-month-labels"
+               onWheel={ this.onMonthsScroll }
+          >
             {
               monthLabels.map((month, i) => (
                 <div
                   key={ i }
                   className={ cx('n3__date-picker__calendar-month-label', {
-                    'n3__date-picker__calendar-month-label_current': this.state.current.isSame(month, 'month'),
-                    'n3__date-picker__calendar-month-label_selected': this.state.selected.isSame(month, 'month'),
+                    'n3__date-picker__calendar-month-label_current': this.isCurrentMonth(i),
+                    'n3__date-picker__calendar-month-label_selected': this.isSelectedMonth(i),
                   }) }
                 >
                   { month }
@@ -211,19 +227,19 @@ export default class Calendar extends Component {
           <div className="n3__date-picker__calendar-years"
                onWheel={ this.onYearsScroll }
           >
-              {
-                this.years.map(year => (
-                  <div
-                    key={ year }
-                    className={ cx('n3__date-picker__calendar-year', {
-                      'n3__date-picker__calendar-year_current': this.state.current.year() === year,
-                      'n3__date-picker__calendar-year_selected': this.state.selected.year() === year,
-                    }) }
-                  >
-                    { year }
-                  </div>
-                ))
-              }
+            {
+              this.years.map(year => (
+                <div
+                  key={ year }
+                  className={ cx('n3__date-picker__calendar-year', {
+                    'n3__date-picker__calendar-year_current': this.state.current.year() === year,
+                    'n3__date-picker__calendar-year_selected': this.state.selected.year() === year,
+                  }) }
+                >
+                  { year }
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
