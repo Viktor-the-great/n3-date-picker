@@ -107,19 +107,34 @@
 }
 
 .n3__date-picker__calendar-years {
-  overflow: hidden;
-  margin: 15px;
+  padding: 15px;
+  height: 100%;
 }
 
-.n3__date-picker__calendar-scrollable {
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  padding-right: 15px;
-}
 
 .n3__date-picker__calendar-year {
+  position: relative;
   & + .n3__date-picker__calendar-year {
     margin-top: 10px;
   }
+}
+
+.n3__date-picker__calendar-year_current {
+  font-weight: bold;
+  &:before {
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    margin-top: -2.5px;
+
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: #4375CD;
+    border-radius: 5px;
+  }
+}
+
+.n3__date-picker__calendar-year_selected {
+
 }
