@@ -11,7 +11,7 @@ export default class DatePicker extends Component {
     super(props);
 
     this.state = {
-      opened: false,
+      opened: true,
     };
   }
 
