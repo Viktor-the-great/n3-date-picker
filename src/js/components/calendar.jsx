@@ -36,8 +36,8 @@ export default class Calendar extends Component {
   setMonth5Ref = el => this._lastMonth = el;
 
   componentDidMount() {
-    this._marginTop = this._currentMonth.offsetTop;
-    this._months.style.marginTop = `-${ this._marginTop }px`;
+    this._marginTop = -this._currentMonth.offsetTop;
+    this._months.style.marginTop = `${ this._marginTop }px`;
   }
 
   onSingleChange(value) {
@@ -133,23 +133,28 @@ export default class Calendar extends Component {
   }
 
   onDaysScroll = async ({ currentTarget, deltaY }) => {
-    this._marginTop = deltaY > 0 ? this._marginTop - 10 : this._marginTop + 10;
-    currentTarget.style.marginTop = `${ this._marginTop }px`;
+    const months = this.months;
+    const start = months[0];
+    const end = months[months.length - 1];
+    const totalDays = end.diff(start, 'days') + 1;
+    const days = totalDays / (currentTarget.clientHeight / this.props.speed);
+    const prevMonth = moment(this.state.selected);
+    const firstMonthHeight = this._firstMonth.clientHeight;
 
-    const totalDays = this.months.reduce((res, month) => res + month.daysInMonth(), 0);
-    const days = totalDays / (currentTarget.clientHeight / 10);
-    const selected = moment(this.state.selected);
 
     await this.setState(state => ({
       selected: deltaY > 0 ? state.selected.add(days, 'day') : state.selected.subtract(days, 'day')
     }));
 
-    if(!selected.isSame(this.state.selected, 'month')) {
-      this._marginTop = this._marginTop + selected.isAfter(this.state.selected, 'month') ?  - this._firstMonth.clientHeight : this._lastMonth.clientHeight
-      currentTarget.style.marginTop = `${ this._marginTop }px`;
+    if (prevMonth.isSame(this.state.selected, 'month')) {
+      this._marginTop = deltaY > 0 ? this._marginTop - this.props.speed : this._marginTop + this.props.speed;
+    } else if (prevMonth.isAfter(this.state.selected, 'month')) {
+      this._marginTop = this._marginTop - this._firstMonth.clientHeight + this.props.speed;
+    } else {
+      this._marginTop = this._marginTop + firstMonthHeight - this.props.speed;
     }
 
-    console.log(this.state.selected.format('DD.MM.YYYY'))
+    currentTarget.style.marginTop = `${ this._marginTop }px`;
   };
 
   onMonthsScroll = ({ deltaY }) => {
@@ -289,6 +294,8 @@ Calendar.propTypes = {
   from: momentPropTypes.momentString,
   to: momentPropTypes.momentString,
 
+  speed: PropTypes.number,
+
   range: PropTypes.bool,
   formats: PropTypes.arrayOf(
     PropTypes.string,
@@ -300,6 +307,8 @@ Calendar.defaultProps = {
   value: null,
   from: null,
   to: null,
+
+  speed: 20,
 
   range: false,
   formats: null,
